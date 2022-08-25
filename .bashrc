@@ -1,31 +1,60 @@
-# .bashrc
+#.bashrc
 
-cat ~/.evangelion_ascii_1.txt | lolcat
+set -o vi
 
 
+export PATH=$PATH:/Users/jlazar/bin
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
 ## Source global definitions
-#if [ -f /etc/bashrc ]; then
-#	. /etc/bashrc
-#fi
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+if [[ -f ~/.bash_prompt ]]; then
+  . ~/.bash_prompt
+fi
 
 # User specific aliases and functions #
 alias combo='/home/jlazar/Code/build/env-shell.sh'
 alias shovel='dataio-pyshovel'
-alias jup="jupyter notebook &> ~/jup.log &"
-alias c="ssh cobalt"
+alias jup="jupyter lab &> ~/jup.log &"
+alias killjup="pkill -f jupyter"
+alias c="ssh cobalt08.icecube.wisc.edu"
+#alias cobalt="ssh cobalt"
+alias cobalt="ssh cobalt -t 'cd /data/user/jlazar/; bash --login'"
+alias ls='ls -GH'
+alias modok='ssh mimo'
+alias modok_jumper='ssh -CX -o ServerAliveInterval=30 -fN mimo'
+#alias python='/usr/local/Cellar/python\@3.7/3.7.12/bin/python3'
+#alias pip='python -m pip3'
+alias julia='/Applications/Julia-1.7.app/Contents/Resources/julia/bin/julia'
+alias jetson="sshjetson"
+alias vi="vim"
+alias juliatmp="julia --project=$(mktemp -d)"
+alias please="sudo"
+alias ipython="/usr/local/bin/ipython3"
 
 # combine cd as ls into one command
 function cl() {
-    local dir="$1"
-    local dir="${dir:=$HOME}"
-    if [[ -d "$dir" ]]; then
-        cd "$dir" >/dev/null; ls
-    else
-        echo "bash: cl: $dir: Directory not found"
-    fi
+    command cd "$@" && ls;
+}
+
+function cll() {
+    command cd "$@" && ls -al;
+}
+
+function ml_exp() {
+    command cd /Users/jlazar/IceCube/ml_experiments/; git pull; conda activate qiskit;
+}
+
+function taurunner() {
+    command cd /Users/jlazar/IceCube/TauRunner/; git pull; conda activate qcml; conda-develop /Users/jlazar/IceCube/TauRunner/
+}
+
+function qcml() {
+    command cd /Users/jlazar/research/qcml/; git pull; conda activate qcml; conda-develop /Users/jlazar/research/qcml/
 }
 
 # function to move files to ~/trash rather than delete
@@ -38,7 +67,7 @@ function del() {
     fi
 }
 
-extract () {
+function extract () {
    if [ -f $1 ] ; then
        case $1 in
            *.tar.bz2)   tar xvjf $1    ;;
@@ -59,19 +88,7 @@ extract () {
    fi
  }
 
-
-#RESET="\[\017\]"
-#NORMAL="\[\033[0m\]"
-#RED="\[\033[31;1m\]"
-#GREEN="\[\033[32;1m\]"
-#YELLOW="\[\033[33;1m\]"
-#WHITE="\[\033[37;1m\]"
-#SMILEY="${GREEN}:)${NORMAL}"
-#FROWNY="${RED}:(${NORMAL}"
-#SELECT="if [ \$? = 0 ]; then echo \"${SMILEY}\"; else echo \"${FROWNY}\"; fi"
-
-# Throw it all together 
-#export PS1="\[${RESET}\]\[${YELLOW}\]\h\[${NORMAL}\] \[\e[5m\A\] \`${SELECT}\` \[${YELLOW}\]>\[${NORMAL}\] \] "
+export MPLCONFIGDIR=/Users/jlazar/.matplotlib/
 
 ### ETERNAL BASH HISTORY
 # ---------------------
@@ -89,3 +106,6 @@ export HISTFILE=~/.bash_eternal_history
 # http://superuser.com/questions/20900/bash-history-loss
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 /Users/jlazar/miniconda3/etc/profile.d/conda.sh
+[ -f "/Users/jlazar/.ghcup/env" ] && source "/Users/jlazar/.ghcup/env" # ghcup-env
+
+cat ~/.evangelion_ascii.txt | lolcat-c

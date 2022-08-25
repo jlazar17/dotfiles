@@ -1,0 +1,53 @@
+Host cobalt
+    HostName cobalt
+
+Host cobalt
+    HostName cobalt
+    User jlazar
+
+Host pub2.icecube.wisc.edu
+    User jlazar
+    Compression yes
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials yes
+    ProxyCommand none
+
+Host cobalt
+    User jlazar
+    ControlMaster auto
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    KeepAlive yes
+    ServerAliveInterval 55
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials yes
+    LocalForward 8058 127.0.0.1:8058
+    ProxyCommand ssh -qax pub2.icecube.wisc.edu "nc %h %p"
+
+Host cobalt*.icecube.wisc.edu
+    User jlazar
+    ControlMaster auto
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    ForwardAgent yes
+    KeepAlive yes
+    ServerAliveInterval 55
+    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials yes
+    LocalForward 8058 127.0.0.1:8058
+    ProxyCommand ssh -qax pub2.icecube.wisc.edu "nc %h %p"
+
+Host mimo
+    User jlazar
+    HostName login.rc.fas.harvard.edu
+    controlmaster auto
+    controlpath ~/.ssh/%r@%h:%p
+
+Host jetson
+    User arguelles
+    HostName 128.103.100.37
+    controlmaster auto
+    controlpath ~/.ssh/%r@%h:%p
